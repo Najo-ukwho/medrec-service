@@ -250,7 +250,4 @@ After running locally, access:
 
 http://127.0.0.1:8000/docs
 
-Screenshots of key flows are available in the `demo/` folder:
-- API interface (Swagger)
-- Conflict detection
-- Conflict resolution
+Screenshots and screen recordings of key flows are available in the `demo/` folder:
