@@ -1,0 +1,10 @@
+{
+  "drug_classes": {
+    "lisinopril": "ace_inhibitor",
+    "losartan": "arb",
+    "enalapril": "ace_inhibitor"
+  },
+  "conflicting_classes": [
+    ["ace_inhibitor", "arb"]
+  ]
+}

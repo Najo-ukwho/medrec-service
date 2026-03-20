@@ -48,12 +48,12 @@ def ingest_medications(patient_id: str, data: dict):
         })
 
     return {
-        "status": "saved",
-        "patient_id": patient_id,
-        "version": record["version"],  # 👈 show version in response
-        "conflicts_found": len(conflicts)
-    }
-
+    "status": "saved",
+    "patient_id": patient_id,
+    "version": record["version"],
+    "conflicts_found": len(conflicts),
+    "conflicts": conflicts  
+}
 
 # ✅ Reporting: patients with unresolved conflicts
 @router.get("/patients-with-conflicts")
