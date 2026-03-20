@@ -34,7 +34,23 @@ Since these sources can often conflict, the system stores all versions of medica
 6. Conflicts are stored and can later be resolved
 
 ---
+## Architecture Overview
 
+The project is structured into three main parts:
+
+- **API Layer** (`routes.py`)  
+  Handles incoming requests and responses.
+
+- **Service Layer** (`services/`)  
+  Contains business logic such as normalization and conflict detection.
+
+- **Database Layer** (`database.py`)  
+  Manages MongoDB connection and data storage.
+
+The flow is:
+API → normalization → snapshot storage → conflict detection → conflict storage → response
+
+---
 ## Data Structure
 
 ### Snapshots
@@ -53,7 +69,21 @@ Each time data is sent, a new snapshot is created:
 ```
 
 ---
+## Indexing Strategy
 
+To improve query performance, the following fields are indexed:
+
+- `patient_id` in snapshots and conflicts (for fast lookup per patient)
+- `clinic_id` in conflicts (for aggregation queries)
+- `status` in conflicts (to filter unresolved conflicts)
+
+These indexes help optimize frequent queries such as:
+- fetching patient history
+- listing unresolved conflicts
+- clinic-based aggregation
+```
+
+---
 ### Conflicts
 
 Conflicts are stored separately:
@@ -219,3 +249,8 @@ These decisions were made to balance clarity, completeness, and time constraints
 After running locally, access:
 
 http://127.0.0.1:8000/docs
+
+Screenshots of key flows are available in the `demo/` folder:
+- API interface (Swagger)
+- Conflict detection
+- Conflict resolution
