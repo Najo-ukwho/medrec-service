@@ -1,10 +1,11 @@
 from pymongo import MongoClient
+from datetime import datetime
 import random
 
 client = MongoClient("mongodb+srv://naveenamj2005_db_user:nIbYpiN0bGBmZseu@cluster0.brorwls.mongodb.net/?appName=Cluster0")
 db = client["medrec_db"]
 
-patients = [f"p{i}" for i in range(10, 21)]
+patients = [f"p{i}" for i in range(1, 21)]
 
 sources = ["clinic_emr", "hospital", "patient_reported"]
 
@@ -18,17 +19,23 @@ medications_pool = [
 
 
 def generate_med_list():
-    return random.sample(medications_pool, k=random.randint(1, 3))
+    return random.sample(medications_pool, k=random.randint(1, 2))
 
 
 def seed_data():
     for patient in patients:
-        for _ in range(random.randint(2, 3)):  # multiple snapshots
+
+        for _ in range(random.randint(2, 3)):
+
+            existing_count = db.snapshots.count_documents({"patient_id": patient})
 
             record = {
                 "patient_id": patient,
                 "source": random.choice(sources),
-                "medications": generate_med_list()
+                "clinic_id": random.choice(["clinic_A", "clinic_B"]),  # ✅ NEW
+                "medications": generate_med_list(),
+                "version": existing_count + 1,
+                "created_at": datetime.utcnow()
             }
 
             db.snapshots.insert_one(record)
